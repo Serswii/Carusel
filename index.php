@@ -206,7 +206,7 @@ small:after {
 		  position: absolute;
 		  right: 5%;
 		  margin-top: 0.1em; /* Подымание и опускание часов */
-		  color: blue;
+		  color: #343434;
 		}
 	</style>
 
@@ -214,8 +214,28 @@ small:after {
   	<div class="slide--parent">
 
 
-  	<?php
+  		<!-- <div class="parent--el">
+	    		<h1><span>'werwer'</span></h1>
+					<div class="two--col">
+						<div class="is-item has--img">
+							<figure class="the-img">
+								<video id="video"  width="1000" height="500" src="video/Blurred Bokeh Video.mp4" autoplay poster=""></video>
+								
+							</figure>
+						</div>
+						<div class="is-item has--content">
+							<div class="is-item--inner">
+								
+								<small>Последние новости:</small>
+								<hr>
+								<p>assdasd</p>
+							</div>
+						</div>
+					</div>
+				</div> -->
 
+  	<?php
+// <img src=images/'.$row['foto'].' width = "900" height = "540" alt=""> 
 		$test = $dbh->query("SELECT * FROM `spisok`");
 	    $test->setFetchMode(PDO::FETCH_ASSOC);
 	    while ($row = $test->fetch()) {
@@ -226,7 +246,8 @@ small:after {
 					<div class="two--col">
 						<div class="is-item has--img">
 							<figure class="the-img">
-								<img src=images/'.$row['foto'].' width = "900" height = "540" alt=""> 
+								<video id="video" width="1000" height="500" src="video/Blurred Bokeh Video.mp4" autoplay poster=""></video>
+								
 							</figure>
 						</div>
 						<div class="is-item has--content">
@@ -264,18 +285,31 @@ small:after {
 
 </div>
 	<script type="text/javascript">
-		
 		var slideEl = $(".slide--parent");
+
+			var video = document.getElementById("video");
+			
 
 			slideEl.flickity({
 				imagesLoaded: true,
 				wrapAround: true,
 				autoPlay: 5000,
-				pauseAutoPlayOnHover: false
+				pauseAutoPlayOnHover: false,
 			});
+			video.play();
+			
+
 
 	</script>
 	<script type="text/javascript">
+
+		
+
+		aud.onended = function() {
+	    alert("The audio has ended");
+
+
+
 		obj_hours=document.getElementById("hours");
 
 name_month=new Array ("Января","Февраля","Марта","Апреля","Мая",
