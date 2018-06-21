@@ -125,8 +125,6 @@ require_once ('config.php');
 		       	<input name = "video" type="file" multiple accept="video/*,video/mp4">
 		        <input type = "submit" name = "submit"  value = "Добавить">
     		</center>
-    </form>
-   			 	
-    			
+    </form>  			
 </body>
 </html>

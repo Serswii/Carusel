@@ -4,7 +4,7 @@
 	    
 	} catch (PDOException $e) {
 	    print "Error!: " . $e->getMessage() . "<br/>";
-	    die("РћС€РёР±РєР° РїРѕРґР»СЋС‡РµРЅРёСЏ!");
+	    die("Ошибка подлючения!");
 	}
 
 ?>
@@ -45,18 +45,18 @@ p {
 }
 
 h1 {
-  letter-spacing: 10px; /* Р Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ Р±СѓРєРІР°РјРё*/
+  letter-spacing: 10px; /* Расстояние между буквами*/
  color: #343434; 
 }
 
 small {
   font-style: italic;
   font-weight: 100;
-  margin-bottom: 0.5em; /* Р Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ Р»РёРЅРёСЏРјРё */
+  margin-bottom: 0.5em; /* Расстояние между линиями */
   display: inline-block;
   color: #999;
   position: relative;
-  padding-left: 3em; /* Р Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ Р»РёРЅРёРµР№ Рё С‚РµРєСЃС‚РѕРј */
+  padding-left: 3em; /* Расстояние между линией и текстом */
 }
 small:after {
   content: "";
@@ -219,7 +219,7 @@ small:after {
 		  font-size: 190%;
 		  position: absolute;
 		  right: 5%;
-		  margin-top: 0.1em; /* РџРѕРґС‹РјР°РЅРёРµ Рё РѕРїСѓСЃРєР°РЅРёРµ С‡Р°СЃРѕРІ */
+		  margin-top: 0.1em; /* Подымание и опускание часов */
 		  color: #343434;
 		}
 	</style>
@@ -254,7 +254,7 @@ small:after {
 						<div class="is-item has--content">
 							<div class="is-item--inner">
 								
-								<small>РџРѕСЃР»РµРґРЅРёРµ РЅРѕРІРѕСЃС‚Рё:</small>
+								<small>Последние новости:</small>
 								<hr>
 								<p>assdasd</p>
 							</div>
@@ -281,7 +281,7 @@ small:after {
 	// 					<div class="is-item has--content">
 	// 						<div class="is-item--inner">
 								
-	// 							<small>РџРѕСЃР»РµРґРЅРёРµ РЅРѕРІРѕСЃС‚Рё:</small>
+	// 							<small>Последние новости:</small>
 	// 							<hr>
 	// 							<p>'.$row['text'].'</p>
 	// 						</div>
@@ -299,7 +299,7 @@ small:after {
 	// 				<div class="is-item has--content">
 	// 						<div class="is-item--inner">
 	// 							<h1>'.$row['title'].'</h1>
-	// 							<small>РџРѕСЃР»РµРґРЅРёРµ РЅРѕРІРѕСЃС‚Рё:</small>
+	// 							<small>Последние новости:</small>
 	// 							<hr>
 	// 							<p><center>'.$row['text'].'</center></p>
 	// 						</div>
@@ -355,10 +355,10 @@ small:after {
 
 		obj_hours=document.getElementById("hours");
 
-name_month=new Array ("РЇРЅРІР°СЂСЏ","Р¤РµРІСЂР°Р»СЏ","РњР°СЂС‚Р°","РђРїСЂРµР»СЏ","РњР°СЏ",
-"РСЋРЅСЏ","РСЋР»СЏ","РђРІРіСѓСЃС‚Р°","РЎРµРЅС‚СЏР±СЂСЏ","РћРєС‚СЏР±СЂСЏ","РќРѕСЏР±СЂСЏ","Р”РµРєР°Р±СЂСЏ");
-name_day=new Array ("Р’РѕСЃРєСЂРµСЃРµРЅСЊРµ ","РџРѕРЅРµРґРµР»СЊРЅРёРє ","Р’С‚РѕСЂРЅРёРє ",
-"РЎСЂРµРґР° ","Р§РµС‚РІРµСЂРі ","РџСЏС‚РЅРёС†Р° ","РЎСѓР±Р±РѕС‚Р° ");
+name_month=new Array ("Января","Февраля","Марта","Апреля","Мая",
+"Июня","Июля","Августа","Сентября","Октября","Ноября","Декабря");
+name_day=new Array ("Воскресенье ","Понедельник ","Вторник ",
+"Среда ","Четверг ","Пятница ","Суббота ");
 
 function wr_hours()
 {
