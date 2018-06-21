@@ -1,12 +1,5 @@
 <?php
-	try {
-	    $dbh = new PDO('mysql:host=localhost;dbname=carusel', "root", "");
-	    
-	} catch (PDOException $e) {
-	    print "Error!: " . $e->getMessage() . "<br/>";
-	    die("Ошибка подлючения!");
-	}
-
+include 'db.php';
 ?>
 
 
@@ -17,14 +10,14 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<link rel="stylesheet" href="/css/Shrift.css">
-	
+
 	<link rel="stylesheet" href="/css/flickity.min.css">
 	<link rel="stylesheet" href="css/style.css">
 
-	
+
 	<script src='/js/jquery.min.js'></script>
 	<script src='/js/flickity.min.js'></script>
-  
+
 </head>
 
 <body background="">
@@ -45,7 +38,7 @@ p {
 
 h1 {
   letter-spacing: 10px; /* Расстояние между буквами*/
- color: #343434; 
+ color: #343434;
 }
 
 small {
@@ -197,8 +190,21 @@ small:after {
   transition-delay: 600ms;
   max-width: 2.4em;
 }
+</style>
 
-	</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<p id="hours"></p>
 	<style type="text/css">
 		#hours{
@@ -210,49 +216,30 @@ small:after {
 		}
 	</style>
 
-
   	<div class="slide--parent">
 
 
-  		<!-- <div class="parent--el">
-	    		<h1><span>'werwer'</span></h1>
-					<div class="two--col">
-						<div class="is-item has--img">
-							<figure class="the-img">
-								<video id="video"  width="1000" height="500" src="video/Blurred Bokeh Video.mp4" autoplay poster=""></video>
-								
-							</figure>
-						</div>
-						<div class="is-item has--content">
-							<div class="is-item--inner">
-								
-								<small>Последние новости:</small>
-								<hr>
-								<p>assdasd</p>
-							</div>
-						</div>
-					</div>
-				</div> -->
-
   	<?php
-// <img src=images/'.$row['foto'].' width = "900" height = "540" alt=""> 
-		$test = $dbh->query("SELECT * FROM `spisok`");
+		$test = $DBH->query("SELECT * FROM `items`");
 	    $test->setFetchMode(PDO::FETCH_ASSOC);
 	    while ($row = $test->fetch()) {
-	    	if($row['foto']!=""){
 	    	echo '
 	    		<div class="parent--el">
 	    		<h1><span>'.$row['title'].'</span></h1>
 					<div class="two--col">
 						<div class="is-item has--img">
-							<figure class="the-img">
-								<video id="video" width="1000" height="500" src="video/Blurred Bokeh Video.mp4" autoplay poster=""></video>
-								
+							<figure class="the-img">';
+							if ($row['id_type'] == 0) {
+								echo '<img src=images/'.$row['src'].' width = "900" height = "540" alt="">';
+							}else if($row['id_type'] == 1) {
+								echo '<video id="video" width="1000" height="500" src="video/'.$row['src'].'" autoplay poster=""></video>';
+							}
+							echo '
 							</figure>
 						</div>
 						<div class="is-item has--content">
 							<div class="is-item--inner">
-								
+
 								<small>Последние новости:</small>
 								<hr>
 								<p>'.$row['text'].'</p>
@@ -263,24 +250,24 @@ small:after {
 	    	';
 	    }
 
-	else{ 
-
-		echo '
-	    		<div class="parent--el">
-					<div class="two--col">
-					<div class="is-item has--content">
-							<div class="is-item--inner">
-								<h1>'.$row['title'].'</h1>
-								<small>Последние новости:</small>
-								<hr>
-								<p><center>'.$row['text'].'</center></p>
-							</div>
-						</div>
-					</div>
-				</div>
-	    	';
-	    }
-	}
+	// else{
+	//
+	// 	echo '
+	//     		<div class="parent--el">
+	// 				<div class="two--col">
+	// 				<div class="is-item has--content">
+	// 						<div class="is-item--inner">
+	// 							<h1>'.$row['title'].'</h1>
+	// 							<small>Последние новости:</small>
+	// 							<hr>
+	// 							<p><center>'.$row['text'].'</center></p>
+	// 						</div>
+	// 					</div>
+	// 				</div>
+	// 			</div>
+	//     	';
+	//     }
+	// }
 ?>
 
 </div>
@@ -288,7 +275,7 @@ small:after {
 		var slideEl = $(".slide--parent");
 
 			var video = document.getElementById("video");
-			
+
 
 			slideEl.flickity({
 				imagesLoaded: true,
@@ -297,13 +284,13 @@ small:after {
 				pauseAutoPlayOnHover: false,
 			});
 			video.play();
-			
+
 
 
 	</script>
 	<script type="text/javascript">
 
-		
+
 
 		aud.onended = function() {
 	    alert("The audio has ended");
