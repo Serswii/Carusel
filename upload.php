@@ -1,101 +1,67 @@
 <?php
 session_start();
+
 require_once ('db.php');
+$maxImageSize = 1024*1024*5;
+$maxVideoSize = 1024*1024*50;
+$validImageType = array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/svg+xml');
+$validVideoType = array('video/mpeg', 'video/mp4', 'video/ogg');
+header("Location: add.php");
 
 if (isset($_POST['submit'])){
 
 	$title = $_POST['title'];
 	$text = $_POST['text'];
-	$fileName = $_FILES['loadFile']['name'];
 
-  $id_type = 1;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	if (is_uploaded_file($_FILES['loadFile']['tmp_name'])) {
+		$fileName = $_FILES['loadFile']['name'];
+		$fileType = $_FILES['loadFile']['type'];
+		$extension = array_pop(explode(".",$_FILES['loadFile']['name']));
+	 	$uploadImageDir = 'images/';
+		$uploadVideoDir = 'video/';
+		$newFileName = md5($fileName).time().'.'.$extension;
 
-	if($title !="" OR $text !="" OR $fileName !=""){
+		if (in_array($fileType, $validImageType)) {//image
+			if ($_FILES['loadFile']['size'] < $maxImageSize) {
+					if (move_uploaded_file($_FILES['loadFile']['tmp_name'], $uploadImageDir . $newFileName)) {
+							addToDB($DBH, $title, $text, $newFileName, "image");
+					} else {
+							$_SESSION['msg'] = $_FILES['loadFile']['error'];
+					}
+			}else{
+					$_SESSION['msg'] = "Max image size: ".$maxImageSize;
+			}
+		}else if (in_array($fileType, $validVideoType)) {//video
+			if ($_FILES['loadFile']['size'] < $maxVideoSize) {
+					if (move_uploaded_file($_FILES['loadFile']['tmp_name'], $uploadVideoDir . $newFileName)) {
+							addToDB($DBH, $title, $text, $newFileName, "video");
+					} else {
+							$_SESSION['msg'] = $_FILES['loadFile']['error'];
+					}
+			}else{
+					$_SESSION['msg'] = "Max video size: ".$maxVideoSize;
+			}
+		}else {
+			$_SESSION['msg'] = "file unvalid";
+		}
 
-    $STH = $DBH->prepare("INSERT INTO `items`(`title`,`text`,`src`, `id_type`) VALUES (:title, :text, :src, :id_type)");
-
-    $STH->bindParam(':title', $title);
-    $STH->bindParam(':text', $text);
-    $STH->bindParam(':src', $fileName);
-    $STH->bindParam(':id_type', $id_type);
-
-    $STH->execute();
+	}else{
+		addToDB($DBH, $title, $text, "", "text");
 
 	}
 }
-//
-// if(!empty($_FILES['foto']['tmp_name'])){
-//
-// 	if(!empty($_FILES['foto']['error'])){
-// 		$_SESSION['msg'] = 'Произошла ошибка загрузки';
-// 		header('Location:add.php');
-// 	}
-//
-// 	switch (!empty($_FILES['foto']['type'])) {
-//
-// 		case 'image/jpeg':
-// 		case 'image/pjpeg':
-// 		$type = 'jpeg';
-// 		break;
-//
-// 		case 'image/png':
-// 		case 'image/x-png':
-// 		$type = 'png';
-// 		break;
-//
-// 		case 'image/gif':
-// 		$type = 'gif';
-// 		break;
-//
-// 		default:
-// 		echo "Неправильный тип изображения";
-// 		$_SESSION['msg'] = 'Неправильный тип изображения';
-// 		header('Location:add.php');
-// 		break;
-// 	}
-// 	$test =$_FILES['foto']['name'];
-// 	if(move_uploaded_file($_FILES['foto']['tmp_name'], 'images/'.$test)){
-// 		$_SESSION['msg'] = 'Не удалось загрузить файл';
-// 		$_SESSION['msg'] = ' Фото добавлено в БД "images/'.$test;
-// 		$_SESSION['msa'] ='"images/';
-// 		echo $_SESSION['msg'];
-// 	}else{
-//
-// 		$_SESSION['msg'] = 'Вы не загрузили файл';
-// 		echo $_SESSION['msg'];
-// 	}
-// }
-//
-// 			// if(!empty($_FILES['video']['tmp_name'])){
-//
-// 			// 			if(!empty($_FILES['video']['error'])){
-// 			// 			$_SESSION['msg'] = 'Произошла ошибка загрузки';
-//
-// 			// 			}
-//
-// 			// 			switch (!empty($_FILES['video']['type'])) {
-//
-// 			// 				case 'video/MPEG-4':
-// 			// 				$type = 'mp4';
-// 			// 				break;
-//
-// 			// 				default:
-// 			// 				echo "Неправильный тип изображения";
-// 			// 				$_SESSION['msg'] = 'Неправильный тип изображения';
-// 			// 				break;
-// 			// 			}
-// 			// 				$test =$_FILES['video']['name'];
-// 			// 			if(move_uploaded_file($_FILES['video']['tmp_name'],'video/'.$test)){
-// 			// 				$_SESSION['msg'] = 'Не удалось загрузить файл';
-//
-//
-// 			// 		$_SESSION['msg'] = ' Фото добавлено в БД "video/'.$test.'"';
-//
-// 			// 		echo $_SESSION['msg'];
-// 			// 		}else{
-//
-// 			// 			$_SESSION['msg'] = 'Вы не загрузили файл';
-// 			// 			echo $_SESSION['msg'];
-// 			// 		}
-// 			// }
+
+function addToDB($DBH, $title, $text, $newFileName, $type){
+	$STH = $DBH->prepare("INSERT INTO `items` (`title`,`text`,`src`, `id_type`) VALUES ( :title, :text, :src, (SELECT `id` FROM `type` WHERE `name` = :type))");
+
+	$STH->bindParam(':title', $title);
+	$STH->bindParam(':text', $text);
+	$STH->bindParam(':src', $newFileName);
+	$STH->bindParam(':type', $type);
+
+	$STH->execute();
+	$_SESSION['msg'] = "successfully";
+
+}
+
 ?>
